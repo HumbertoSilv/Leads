@@ -1,11 +1,14 @@
-from app.configs.database import db
+import re
 from dataclasses import dataclass
 from datetime import datetime
+
+from app.configs.database import db
+from app.exc.lead_exc import InvalidNumberPhoneError
+from sqlalchemy.orm import validates
 
 
 @dataclass
 class Leads(db.Model):
-    id: int
     name: str
     email: str
     phone: str
@@ -22,3 +25,11 @@ class Leads(db.Model):
     creation_date = db.Column(db.Date, default=datetime.utcnow())
     last_visit = db.Column(db.Date, default=datetime.utcnow())
     visits = db.Column(db.Integer, default=1)
+
+    @validates("phone")
+    def validate_phone(self, key, phone):
+        success = re.fullmatch(r"^\(?\d{2}\)?[\s-]?[\s9]?\d{4}-?\d{4}$", phone)
+        if not success:
+            raise InvalidNumberPhoneError("Incorrect number.")
+
+        return phone
