@@ -1,6 +1,2 @@
 class InvalidNumberPhoneError(Exception):
     ...
-
-
-class InvalidEmailError(Exception):
-    ...

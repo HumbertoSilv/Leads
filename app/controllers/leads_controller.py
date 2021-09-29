@@ -46,4 +46,13 @@ def update_lead():
 
 
 def delete_lead():
-    ...
+    data = request.json
+    if type(data["email"]) != str:
+        return {"msg": "Format Email invalid."}
+
+    user = Leads.query.filter_by(email=data["email"]).first_or_404()
+
+    current_app.db.session.delete(user)
+    current_app.db.session.commit()
+
+    return {}, 204
