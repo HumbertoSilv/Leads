@@ -1,8 +1,8 @@
-"""create table lead
+"""create table leads
 
-Revision ID: 56e165605b5e
+Revision ID: 000b3265eb60
 Revises:
-Create Date: 2021-09-28 20:38:08.566537
+Create Date: 2021-09-29 07:36:54.338217
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '56e165605b5e'
+revision = '000b3265eb60'
 down_revision = None
 branch_labels = None
 depends_on = None

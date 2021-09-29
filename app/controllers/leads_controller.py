@@ -21,7 +21,12 @@ def register_lead():
 
 
 def get_leads():
-    ...
+    try:
+        all_leads = Leads.query.order_by(Leads.visits).all()
+        return jsonify(all_leads), 200
+
+    except sqlalchemy.exc.ProgrammingError:
+        return {"msg": "No data found."}, 404
 
 
 def update_lead():
