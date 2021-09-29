@@ -2,6 +2,7 @@ import sqlalchemy
 from app.exc.lead_exc import InvalidNumberPhoneError
 from app.models.leads_model import Leads
 from flask import current_app, jsonify, request
+from datetime import datetime
 
 
 def register_lead():
@@ -30,7 +31,18 @@ def get_leads():
 
 
 def update_lead():
-    ...
+    data = request.json
+    if type(data["email"]) != str:
+        return {"msg": "Format Email invalid."}
+
+    user = Leads.query.filter_by(email=data["email"]).first_or_404()
+    user.visits += 1
+    user.last_visit = datetime.utcnow()
+
+    current_app.db.session.add(user)
+    current_app.db.session.commit()
+
+    return {}, 204
 
 
 def delete_lead():
