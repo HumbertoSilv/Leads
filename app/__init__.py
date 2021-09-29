@@ -1,5 +1,6 @@
 from flask import Flask
 from app.configs import env_configs, database, migrate
+from app.routes import lead_blueprint
 
 
 def create_app():
@@ -8,5 +9,6 @@ def create_app():
     env_configs.init_app(app)
     database.init_app(app)
     migrate(app)
+    app.register_blueprint(lead_blueprint.bp)
 
     return app
