@@ -8,7 +8,7 @@ def create_app():
 
     env_configs.init_app(app)
     database.init_app(app)
-    migrate(app)
+    migrate.init_app(app)
     app.register_blueprint(lead_blueprint.bp)
 
     return app
