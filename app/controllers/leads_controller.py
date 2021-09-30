@@ -33,26 +33,38 @@ def get_leads():
 def update_lead():
     data = request.json
     if type(data["email"]) != str:
-        return {"msg": "Format Email invalid."}
+        return {"msg": "Format Email invalid."}, 400
 
-    user = Leads.query.filter_by(email=data["email"]).first_or_404()
-    user.visits += 1
-    user.last_visit = datetime.utcnow()
+    if len(data) > 1:
+        return {"msg": "Number of fields higher than expected."}, 400
 
-    current_app.db.session.add(user)
-    current_app.db.session.commit()
+    try:
+        user = Leads.query.filter_by(email=data["email"]).first_or_404()
+        user.visits += 1
+        user.last_visit = datetime.utcnow()
 
-    return {}, 204
+        current_app.db.session.add(user)
+        current_app.db.session.commit()
+        return {}, 204
+
+    except KeyError as e:
+        return {"msg": f"Missing {e} field"}, 400
 
 
 def delete_lead():
     data = request.json
     if type(data["email"]) != str:
-        return {"msg": "Format Email invalid."}
+        return {"msg": "Format Email invalid."}, 400
 
-    user = Leads.query.filter_by(email=data["email"]).first_or_404()
+    if len(data) > 1:
+        return {"msg": "Number of fields higher than expected."}, 400
 
-    current_app.db.session.delete(user)
-    current_app.db.session.commit()
+    try:
+        user = Leads.query.filter_by(email=data["email"]).first_or_404()
 
-    return {}, 204
+        current_app.db.session.delete(user)
+        current_app.db.session.commit()
+        return {}, 204
+
+    except KeyError as e:
+        return {"msg": f"Missing {e} field"}, 400
