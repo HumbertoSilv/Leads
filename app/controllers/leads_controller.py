@@ -20,6 +20,11 @@ def register_lead():
     except InvalidNumberPhoneError as e:
         return {"msg": str(e)}, 400
 
+    except TypeError:
+        return {
+            "msg": "The fields name, email and phone must be informed."
+            }, 400
+
 
 def get_leads():
     try:
