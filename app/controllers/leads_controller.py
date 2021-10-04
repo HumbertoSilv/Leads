@@ -32,13 +32,13 @@ def get_leads():
 
 def update_lead():
     data = request.json
-    if type(data["email"]) != str:
-        return {"msg": "Format Email invalid."}, 400
-
-    if len(data) > 1:
-        return {"msg": "Number of fields higher than expected."}, 400
-
     try:
+        if type(data["email"]) != str:
+            return {"msg": "Format Email invalid."}, 400
+
+        if len(data) > 1:
+            return {"msg": "Number of fields higher than expected."}, 400
+
         user = Leads.query.filter_by(email=data["email"]).first_or_404()
         user.visits += 1
         user.last_visit = datetime.utcnow()
@@ -50,16 +50,20 @@ def update_lead():
     except KeyError as e:
         return {"msg": f"Missing {e} field"}, 400
 
+    except TypeError:
+        return {"msg": "The e-mail field must be informed."}, 400
+
 
 def delete_lead():
     data = request.json
-    if type(data["email"]) != str:
-        return {"msg": "Format Email invalid."}, 400
-
-    if len(data) > 1:
-        return {"msg": "Number of fields higher than expected."}, 400
 
     try:
+        if len(data) > 1:
+            return {"msg": "Number of fields higher than expected."}, 400
+
+        if type(data["email"]) != str:
+            return {"msg": "Format Email invalid."}, 400
+
         user = Leads.query.filter_by(email=data["email"]).first_or_404()
 
         current_app.db.session.delete(user)
@@ -68,3 +72,6 @@ def delete_lead():
 
     except KeyError as e:
         return {"msg": f"Missing {e} field"}, 400
+
+    except TypeError:
+        return {"msg": "The e-mail field must be informed."}, 400
