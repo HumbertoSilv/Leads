@@ -1,5 +1,6 @@
 from flask import Flask
-from app.configs import env_configs, database, migrate
+
+from app.configs import database, env_configs, migrate
 from app.routes import lead_blueprint
 
 
