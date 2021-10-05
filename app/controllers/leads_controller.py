@@ -1,13 +1,13 @@
+from datetime import datetime
+
 import sqlalchemy
 from app.exc.lead_exc import InvalidNumberPhoneError
 from app.models.leads_model import Leads
 from flask import current_app, jsonify, request
-from datetime import datetime
 
 
 def register_lead():
     data = request.json
-
     try:
         new_lead = Leads(**data)
         current_app.db.session.add(new_lead)
@@ -61,7 +61,6 @@ def update_lead():
 
 def delete_lead():
     data = request.json
-
     try:
         if len(data) > 1:
             return {"msg": "Number of fields higher than expected."}, 400
